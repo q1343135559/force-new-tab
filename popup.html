@@ -6,34 +6,38 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            width: 220px;
+            width: 260px;
             padding: 16px;
             margin: 0;
             background-color: #f9f9f9;
+            color: #333;
         }
 
-        .container {
+        .card {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 12px;
+        }
+
+        .flex-between {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: white;
-            padding: 12px 16px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .title {
             font-size: 14px;
             font-weight: 600;
-            color: #333;
         }
 
-        /* 开关的 CSS 样式 */
+        /* 开关样式 */
         .switch {
             position: relative;
             display: inline-block;
-            width: 44px;
-            height: 24px;
+            width: 40px;
+            height: 22px;
         }
 
         .switch input {
@@ -51,14 +55,14 @@
             bottom: 0;
             background-color: #ccc;
             transition: .4s;
-            border-radius: 24px;
+            border-radius: 22px;
         }
 
         .slider:before {
             position: absolute;
             content: "";
-            height: 18px;
-            width: 18px;
+            height: 16px;
+            width: 16px;
             left: 3px;
             bottom: 3px;
             background-color: white;
@@ -71,19 +75,106 @@
         }
 
         input:checked+.slider:before {
-            transform: translateX(20px);
+            transform: translateX(18px);
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 8px 0;
+            margin-top: 8px;
+            text-align: center;
+            background-color: #f0f0f5;
+            color: #007AFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #e5e5ea;
+        }
+
+        .btn.danger {
+            color: #FF3B30;
+        }
+
+        /* 白名单列表 */
+        .whitelist-container {
+            margin-top: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+            border-top: 1px solid #eee;
+            padding-top: 8px;
+        }
+
+        .whitelist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            font-size: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .domain-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 160px;
+        }
+
+        .remove-btn {
+            color: #FF3B30;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px;
+        }
+
+        .remove-btn:hover {
+            text-decoration: underline;
+        }
+
+        .empty-text {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            padding: 12px 0;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <span class="title">Force New Tab</span>
+    <div class="card flex-between">
+        <span class="title">强制新标签页</span>
         <label class="switch">
             <input type="checkbox" id="toggleSwitch">
             <span class="slider"></span>
         </label>
     </div>
+
+    <div class="card">
+        <div class="flex-between">
+            <span class="title">当前网站</span>
+        </div>
+        <div id="currentDomainInfo"
+            style="font-size: 12px; color: #666; margin-top: 4px; margin-bottom: 8px; word-break: break-all;">获取中...
+        </div>
+        <button id="addWhitelistBtn" class="btn">添加到白名单</button>
+
+        <div class="whitelist-container">
+            <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">已添加的白名单：</div>
+            <div id="whitelistItems">
+            </div>
+        </div>
+    </div>
+
     <script src="popup.js"></script>
 </body>
 
