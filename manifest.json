@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "强制新标签页打开",
+    "version": "1.0",
+    "description": "拦截所有链接点击，强制在新标签页打开，完美支持 YouTube 等单页应用 (SPA)。",
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_start"
+        }
+    ]
+}
