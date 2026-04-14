@@ -1,13 +1,24 @@
 {
     "manifest_version": 3,
-    "name": "强制新标签页打开 (终极版)",
-    "version": "3.0",
-    "description": "彻底解决 SPA 异步假链接跳转及拦截问题。",
+    "name": "Force new tab to open",
+    "version": "1.0",
+    "description": "With a control switch, the ultimate version that completely resolves SPA asynchronous fake link redirection.",
     "permissions": [
-        "tabs"
+        "tabs",
+        "storage"
     ],
     "background": {
         "service_worker": "background.js"
+    },
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "Forced New Tab Page Settings"
     },
     "content_scripts": [
         {

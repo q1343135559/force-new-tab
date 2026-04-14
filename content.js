@@ -1,8 +1,25 @@
 // content.js
-console.log("🛡️ [ForceNewTab] 隔离环境脚本就绪，负责普通链接与通讯桥梁");
+let isEnabled = true; // 默认开启
 
-// 1. 处理正规的 <a> 标签
+// 1. 页面加载时读取存储的状态
+chrome.storage.local.get({ isEnabled: true }, (result) => {
+    isEnabled = result.isEnabled;
+    // 将状态刻在网页的最外层，方便 inject.js 读取
+    document.documentElement.dataset.forceNewTabEnabled = isEnabled;
+});
+
+// 2. 监听来自右上角开关的【实时更新】消息
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "updateState") {
+        isEnabled = request.isEnabled;
+        document.documentElement.dataset.forceNewTabEnabled = isEnabled;
+    }
+});
+
+// 3. 处理正规的 <a> 标签
 document.addEventListener('click', function (event) {
+    if (!isEnabled) return; // 【新增】开关关闭时，直接放行！
+
     const targetLink = event.target.closest('a');
     if (!targetLink || !targetLink.hasAttribute('href')) return;
 
@@ -19,15 +36,12 @@ document.addEventListener('click', function (event) {
 
     event.preventDefault();
     event.stopPropagation();
-
-    // 通知后台开新页面
     chrome.runtime.sendMessage({ action: "openNewTab", url: targetLink.href });
 }, true);
 
-// 2. 接收来自 inject.js (MAIN 环境) 的求助信号，并转发给后台！(这是你之前漏掉的)
+// 4. 接收来自 inject.js 的求助信号
 window.addEventListener("ForceNewTab_RequestOpen", (event) => {
     if (event.detail && event.detail.url) {
-        console.log("📨 [ForceNewTab] 收到 MAIN 环境请求，发给后台:", event.detail.url);
         chrome.runtime.sendMessage({ action: "openNewTab", url: event.detail.url });
     }
 });
