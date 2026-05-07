@@ -21,7 +21,7 @@ function loadConfig() {
             whitelist = result.whitelist;
 
             const isWhitelisted = isDomainWhitelisted(whitelist, currentHostname);
-            const isPluginActive = isEnabled && !isWhitelisted;
+            const isPluginActive = isEnabled && isWhitelisted;
 
             document.documentElement.dataset.forceNewTabActive = isPluginActive;
         });

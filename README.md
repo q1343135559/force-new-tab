@@ -13,7 +13,7 @@
 - **系统级权限**：通过 Background Service Worker 绕过浏览器的弹窗拦截器（Popup Blocker）。
 - **智能控制**：
   - **总开关**：一键开启或关闭全局拦截功能。
-  - **白名单管理**：支持将当前网站一键加入白名单，白名单内的网站将保持原生行为，不受插件干扰。
+  - **白名单管理**：支持将当前网站一键加入白名单。开关开启时，仅白名单内的网站会被强制新标签打开。
 - **绕过 CSP 限制**：通过 Manifest V3 的 `MAIN` world 注入技术，突破高安全性网站的内容安全策略。
 
 ### 🛠️ 安装方法
@@ -39,7 +39,7 @@ A powerful Chrome extension designed to intercept stubborn navigation behaviors 
 - **System-level Execution**: Uses a Background Service Worker to bypass browser Popup Blockers.
 - **Smart Control**:
   - **Master Switch**: One-click to enable or disable global interception.
-  - **Whitelist Management**: Easily add the current site to a whitelist. Whitelisted sites will maintain their original behavior.
+  - **Whitelist Management**: Easily add the current site to a whitelist. When enabled, only whitelisted sites are forced to open in a new tab.
 - **Bypass CSP Restrictions**: Uses Manifest V3 `MAIN` world injection to bypass Content Security Policy (CSP) on high-security websites.
 
 ### 🛠️ Installation

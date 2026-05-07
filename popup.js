@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentDomain = url.hostname;
                     currentDomainInfo.textContent = currentDomain;
                 } else {
-                    currentDomainInfo.textContent = "无法在此页面添加白名单";
+                    currentDomainInfo.textContent = "无法在此页面加入受控白名单";
                     addWhitelistBtn.style.display = 'none';
                 }
             } catch (e) {
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. 添加当前域名到白名单
+    // 4. 添加当前域名到受控白名单
     addWhitelistBtn.addEventListener('click', () => {
         if (!currentDomain) return;
         chrome.storage.local.get({ whitelist: [] }, (result) => {
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderWhitelist(whitelist) {
         whitelistItemsContainer.innerHTML = '';
         if (whitelist.length === 0) {
-            whitelistItemsContainer.innerHTML = '<div class="empty-text">暂无白名单网站</div>';
+            whitelistItemsContainer.innerHTML = '<div class="empty-text">暂无受控白名单网站</div>';
             return;
         }
 
@@ -98,15 +98,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 7. 更新“添加”按钮的状态（如果已在白名单，则置灰/不可点）
+    // 7. 更新“添加”按钮状态（如果已在受控白名单，则置灰/不可点）
     function updateAddButtonState(whitelist) {
         if (currentDomain && whitelist.includes(currentDomain)) {
-            addWhitelistBtn.textContent = "已在白名单中";
+            addWhitelistBtn.textContent = "已在受控白名单中";
             addWhitelistBtn.disabled = true;
             addWhitelistBtn.style.opacity = '0.5';
             addWhitelistBtn.style.cursor = 'not-allowed';
         } else {
-            addWhitelistBtn.textContent = "添加到白名单";
+            addWhitelistBtn.textContent = "加入受控白名单";
             addWhitelistBtn.disabled = false;
             addWhitelistBtn.style.opacity = '1';
             addWhitelistBtn.style.cursor = 'pointer';
