@@ -7,6 +7,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentDomain = '';
 
+    // 主机名归一化：统一小写（不删除 www，以保留用户视觉上的真实域名）
+    function normalizeHost(host) {
+        return (host || '').toLowerCase();
+    }
+
+    // 用于判断白名单是否已经包含某个域名（严格精确匹配，仅 www. 前缀视为等同）
+    function isAlreadyInWhitelist(whitelist, host) {
+        const cleanHost = normalizeHost(host).replace(/^www\./, '');
+        return whitelist.some(d => normalizeHost(d).replace(/^www\./, '') === cleanHost);
+    }
+
     // 1. 获取当前页面的域名
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length > 0 && tabs[0].url) {
@@ -14,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = new URL(tabs[0].url);
                 // 排除 chrome:// 等内部页面
                 if (url.protocol.startsWith('http')) {
-                    currentDomain = url.hostname;
+                    currentDomain = normalizeHost(url.hostname);
                     currentDomainInfo.textContent = currentDomain;
                 } else {
                     currentDomainInfo.textContent = "无法在此页面加入受控白名单";
@@ -47,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!currentDomain) return;
         chrome.storage.local.get({ whitelist: [] }, (result) => {
             const whitelist = result.whitelist;
-            if (!whitelist.includes(currentDomain)) {
+            if (!isAlreadyInWhitelist(whitelist, currentDomain)) {
                 whitelist.push(currentDomain);
                 chrome.storage.local.set({ whitelist: whitelist }, () => {
                     renderWhitelist(whitelist);
@@ -100,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 7. 更新“添加”按钮状态（如果已在受控白名单，则置灰/不可点）
     function updateAddButtonState(whitelist) {
-        if (currentDomain && whitelist.includes(currentDomain)) {
+        if (currentDomain && isAlreadyInWhitelist(whitelist, currentDomain)) {
             addWhitelistBtn.textContent = "已在受控白名单中";
             addWhitelistBtn.disabled = true;
             addWhitelistBtn.style.opacity = '0.5';

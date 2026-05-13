@@ -5,12 +5,13 @@ let isEnabled = true;
 let whitelist = [];
 const currentHostname = window.location.hostname;
 
-// 智能白名单匹配（支持去掉 www. 及泛子域名匹配）
+// 严格主机名匹配（仅把 www. 前缀视为等同，不再做泛子域名结尾匹配）
+// 例：白名单 www.ozon.ru 仅匹配 www.ozon.ru / ozon.ru，不会误匹配 seller.ozon.ru
 function isDomainWhitelisted(whitelistArray, hostname) {
-    const cleanHost = hostname.replace(/^www\./, '');
+    const cleanHost = (hostname || '').toLowerCase().replace(/^www\./, '');
     return whitelistArray.some(domain => {
-        const cleanDomain = domain.replace(/^www\./, '');
-        return cleanHost === cleanDomain || cleanHost.endsWith('.' + cleanDomain);
+        const cleanDomain = (domain || '').toLowerCase().replace(/^www\./, '');
+        return cleanHost === cleanDomain;
     });
 }
 
